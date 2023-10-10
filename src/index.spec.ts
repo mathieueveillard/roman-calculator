@@ -1,32 +1,115 @@
-// @ts-ignore see https://github.com/jest-community/jest-extended#setup
-import * as matchers from "jest-extended";
-import fc from "fast-check";
+import { add } from ".";
 
-expect.extend(matchers);
+describe("roman addition", () => {
+  test("should add I and I", () => {
+    // WHEN
+    const actual = add({ I: "I" }, { I: "I" });
 
-test("A simple test (Jest)", () => {
-  expect(1 + 1).toEqual(2);
-});
+    // THEN
+    expect(actual).toEqual({ I: "II" });
+  });
 
-test("Additional matchers (jest-extended)", () => {
-  expect([1, 0]).toIncludeSameMembers([0, 1]);
-});
+  test("should add II and I", () => {
+    // WHEN
+    const actual = add({ I: "II" }, { I: "I" });
 
-test("Property-based testing (fast-check)", () => {
-  type Boundaries = {
-    min: number;
-    max: number;
-  };
+    // THEN
+    expect(actual).toEqual({ I: "III" });
+  });
 
-  const minmax =
-    ({ min, max }: Boundaries) =>
-    (n: number): number =>
-      Math.min(max, Math.max(min, n));
+  test("should add II and III", () => {
+    // WHEN
+    const actual = add({ I: "II" }, { I: "III" });
 
-  fc.assert(
-    fc.property(fc.integer(), (n): boolean => {
-      const result = minmax({ min: 1, max: 10 })(n);
-      return 1 <= result && result <= 10;
-    })
-  );
+    // THEN
+    expect(actual).toEqual({ V: "V" });
+  });
+
+  test("should add III and III", () => {
+    // WHEN
+    const actual = add({ I: "III" }, { I: "III" });
+
+    // THEN
+    expect(actual).toEqual({ V: "V", I: "I" });
+  });
+
+  test("should add V and III", () => {
+    // WHEN
+    const actual = add({ V: "V" }, { I: "III" });
+
+    // THEN
+    expect(actual).toEqual({ V: "V", I: "III" });
+  });
+
+  test("should add V and V", () => {
+    // WHEN
+    const actual = add({ V: "V" }, { V: "V" });
+
+    // THEN
+    expect(actual).toEqual({ X: "X" });
+  });
+
+  test("should add V and VII", () => {
+    // WHEN
+    const actual = add({ V: "V" }, { V: "V", I: "II" });
+
+    // THEN
+    expect(actual).toEqual({ X: "X", I: "II" });
+  });
+
+  test("should add VI and VII", () => {
+    // WHEN
+    const actual = add({ V: "V", I: "I" }, { V: "V", I: "II" });
+
+    // THEN
+    expect(actual).toEqual({ X: "X", I: "III" });
+  });
+
+  test("should add VIII and VIII", () => {
+    // WHEN
+    const actual = add({ V: "V", I: "III" }, { V: "V", I: "III" });
+
+    // THEN
+    expect(actual).toEqual({ X: "X", V: "V", I: "I" });
+  });
+
+  test("should add VIII and II", () => {
+    // WHEN
+    const actual = add({ V: "V", I: "III" }, { I: "II" });
+
+    // THEN
+    expect(actual).toEqual({ X: "X" });
+  });
+
+  test("should add X and XX", () => {
+    // WHEN
+    const actual = add({ X: "X" }, { X: "XX" });
+
+    // THEN
+    expect(actual).toEqual({ X: "XXX" });
+  });
+
+  test("should add XX and XXX", () => {
+    // WHEN
+    const actual = add({ X: "XX" }, { X: "XXX" });
+
+    // THEN
+    expect(actual).toEqual({ L: "L" });
+  });
+
+  test("should add LX and XXX", () => {
+    // WHEN
+    const actual = add({ X: "X", L: "L" }, { X: "XXX" });
+
+    // THEN
+    expect(actual).toEqual({ L: "L", X: "XXXX" });
+  });
+
+  test("should add L and L", () => {
+    // WHEN
+    const actual = add({ L: "L" }, { L: "L" });
+
+    // THEN
+    expect(actual).toEqual({ C: "C" });
+  });
 });

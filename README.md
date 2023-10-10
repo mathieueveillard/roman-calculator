@@ -1,9 +1,7 @@
-# js-kata-starter
+# roman-calculator
 
-Starter project for kata (Node, TypeScript, Jest)
+Write a function that adds roman numbers without ever using arabic numbers, e.g.:
 
-## Getting started
-
-- **Fork**, then clone the repository
-- Install dependencies
-- Start developing (`npm test`)
+```
+add("CXLVII", "LXXIII"); // "CCXX"
+```
